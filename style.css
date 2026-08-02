@@ -659,7 +659,7 @@ a{ color: var(--pink-light); }
 /* =========================================================
    SMALL SCREEN GLOBAL ADJUSTMENTS
 ========================================================= */
-@media (max-width: 480px){
+@media (max-width: 300px){
   .page{ padding: 80px 16px 150px; }
   .countdown-box{ min-width: 70px; padding: 14px 10px; }
 }
