@@ -212,7 +212,19 @@ a{ color: var(--pink-light); }
 .page{
   position: absolute; inset: 0;
   width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  /* NOTE: "align-items: safe center" fixes a classic flexbox bug —
+     when content is taller than the viewport, a plain "center" makes
+     the overflow at the TOP unreachable by scrolling (so titles/text
+     above the fold get visually clipped on phones and there is no way
+     to scroll up to see them). "safe center" tells supporting browsers
+     to fall back to start-alignment whenever centering would overflow,
+     so the whole page becomes scrollable and nothing gets clipped.
+     The plain "center" above is kept as a fallback for older browsers
+     that don't understand the "safe" keyword. */
+  align-items: center;
+  align-items: safe center;
+  justify-content: center;
   padding: 90px 24px 130px;
   overflow-y: auto;
   opacity: 0; visibility: hidden;
