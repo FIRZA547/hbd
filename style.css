@@ -1,0 +1,665 @@
+/* =========================================================
+   HAPPY BIRTHDAY WEBSITE — STYLESHEET
+   Theme tokens: pink (#ff4f9a / #ff85c1) + black (#111111)
+   Fonts: Poppins (UI/body) + Great Vibes (script/display)
+========================================================= */
+
+:root{
+  /* --- color tokens --- */
+  --black: #111111;
+  --black-soft: #1b1116;
+  --black-elevated: #221620;
+  --pink: #ff4f9a;
+  --pink-light: #ff85c1;
+  --pink-pale: #ffd6e8;
+  --pink-deep: #c4306f;
+  --white: #fff6fa;
+  --white-dim: rgba(255,246,250,0.72);
+
+  /* --- glass --- */
+  --glass-bg: rgba(255,255,255,0.06);
+  --glass-border: rgba(255,255,255,0.14);
+  --glass-blur: 16px;
+
+  /* --- shadows --- */
+  --shadow-soft: 0 20px 60px rgba(0,0,0,0.45);
+  --shadow-pink: 0 10px 40px rgba(255,79,154,0.35);
+
+  /* --- type scale --- */
+  --fs-script-xl: clamp(2.6rem, 8vw, 5.2rem);
+  --fs-h2: clamp(1.7rem, 4.2vw, 2.6rem);
+  --fs-lead: clamp(1rem, 2vw, 1.2rem);
+  --fs-body: clamp(0.95rem, 1.6vw, 1.05rem);
+
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+*{ box-sizing: border-box; }
+html,body{
+  margin:0; padding:0; width:100%; height:100%;
+  overflow: hidden; /* stage handles its own scroll per page */
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  cursor: none;
+}
+@media (max-width: 780px){
+  html, body{ cursor: auto; }
+  #custom-cursor{ display:none; }
+}
+
+::selection{ background: var(--pink); color: #fff; }
+
+a{ color: var(--pink-light); }
+
+.hidden{ display: none !important; }
+
+/* =========================================================
+   LOADING SCREEN
+========================================================= */
+#loading-screen{
+  position: fixed; inset: 0; z-index: 9999;
+  background: radial-gradient(circle at 50% 40%, #241019 0%, var(--black) 70%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 22px;
+  transition: opacity .8s var(--ease), visibility .8s var(--ease);
+}
+#loading-screen.fade-out{ opacity: 0; visibility: hidden; pointer-events: none; }
+
+.loader-heart{ width: 64px; height: 58px; animation: loaderBeat 1.1s ease-in-out infinite; }
+.loader-heart-svg{ width: 100%; height: 100%; fill: var(--pink); filter: drop-shadow(0 0 18px rgba(255,79,154,0.7)); }
+@keyframes loaderBeat{
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.15); }
+  40% { transform: scale(0.95); }
+  60% { transform: scale(1.1); }
+}
+.loader-text{ font-size: 0.95rem; letter-spacing: 0.06em; color: var(--white-dim); }
+.dots span{ animation: dotFade 1.4s infinite; opacity: 0; }
+.dots span:nth-child(2){ animation-delay: .2s; }
+.dots span:nth-child(3){ animation-delay: .4s; }
+@keyframes dotFade{ 0%,100%{opacity:0;} 50%{opacity:1;} }
+
+/* =========================================================
+   CUSTOM CURSOR (heart)
+========================================================= */
+#custom-cursor{
+  position: fixed; top:0; left:0; z-index: 9998;
+  width: 26px; height: 26px;
+  display: flex; align-items:center; justify-content:center;
+  font-size: 16px; color: var(--pink);
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+  transition: transform .12s var(--ease), opacity .3s ease, font-size .2s ease;
+  filter: drop-shadow(0 0 6px rgba(255,79,154,0.8));
+  will-change: transform;
+}
+#custom-cursor.grow{ font-size: 24px; }
+
+/* =========================================================
+   AMBIENT BACKGROUND — floating hearts & sparkles
+========================================================= */
+#ambient-bg{
+  position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
+}
+.floaty{
+  position: absolute; bottom: -10%;
+  opacity: 0; will-change: transform, opacity;
+  animation-name: floatUp; animation-timing-function: linear; animation-iteration-count: infinite;
+}
+@keyframes floatUp{
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  8%   { opacity: .8; }
+  90%  { opacity: .5; }
+  100% { transform: translateY(-115vh) translateX(var(--drift, 40px)) rotate(360deg); opacity: 0; }
+}
+.floaty.heart{ color: var(--pink-light); font-size: var(--size, 18px); }
+.floaty.sparkle{ color: var(--pink-pale); font-size: var(--size, 10px); }
+
+/* =========================================================
+   SCROLL PROGRESS (top bar = which page you're on)
+========================================================= */
+#page-progress-track{
+  position: fixed; top:0; left:0; width: 100%; height: 3px; z-index: 200;
+  background: rgba(255,255,255,0.08);
+}
+#page-progress-fill{
+  height: 100%; width: 12.5%;
+  background: linear-gradient(90deg, var(--pink), var(--pink-light));
+  box-shadow: 0 0 12px rgba(255,79,154,0.7);
+  transition: width .6s var(--ease);
+}
+
+/* =========================================================
+   DOT INDICATOR (right side)
+========================================================= */
+#dot-indicator{
+  position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
+  z-index: 150; display: flex; flex-direction: column; gap: 14px;
+}
+.dot{
+  width: 9px; height: 9px; border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.3);
+  cursor: pointer; transition: all .35s var(--ease);
+}
+.dot.active{
+  background: var(--pink);
+  border-color: var(--pink);
+  box-shadow: 0 0 10px var(--pink), 0 0 0 4px rgba(255,79,154,0.15);
+  transform: scale(1.3);
+}
+@media (max-width: 780px){ #dot-indicator{ right: 10px; gap: 10px; } .dot{ width:7px; height:7px; } }
+
+/* =========================================================
+   MUSIC PLAYER (floating, bottom-left)
+========================================================= */
+#music-player{
+  position: fixed; left: 20px; bottom: 90px; z-index: 150;
+  display: flex; align-items: center; gap: 10px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  padding: 8px 14px 8px 8px;
+  border-radius: 50px;
+  box-shadow: var(--shadow-soft);
+}
+#music-toggle{
+  width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+  background: linear-gradient(145deg, var(--pink), var(--pink-deep));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 16px rgba(255,79,154,0.55);
+  animation: musicFloat 3s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes musicFloat{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-4px);} }
+#music-toggle svg{ width: 18px; height: 18px; fill:none; stroke:#fff; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+#music-toggle.playing svg{ animation: noteSpin 3s linear infinite; }
+@keyframes noteSpin{ from{ transform: rotate(0);} to{ transform: rotate(360deg);} }
+#music-volume{
+  width: 70px; accent-color: var(--pink);
+  cursor: pointer;
+}
+@media (max-width: 500px){ #music-player{ bottom: 78px; left: 12px; padding: 6px 10px 6px 6px;} #music-volume{ width: 50px; } }
+
+/* =========================================================
+   BACK TO TOP
+========================================================= */
+#back-to-top{
+  position: fixed; right: 20px; bottom: 90px; z-index: 150;
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--glass-border);
+  background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur));
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transform: translateY(10px);
+  transition: all .35s var(--ease);
+  box-shadow: var(--shadow-soft);
+}
+#back-to-top.show{ opacity: 1; pointer-events: auto; transform: translateY(0); }
+#back-to-top svg{ width:18px; height:18px; fill:none; stroke: var(--pink-light); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+#back-to-top:hover{ background: var(--pink); }
+#back-to-top:hover svg{ stroke: #fff; }
+@media (max-width: 780px){ #back-to-top{ right: 12px; bottom: 78px; width: 38px; height:38px; } #dot-indicator{ display: none; } }
+
+/* =========================================================
+   STAGE / PAGES — each section is a full viewport "slide"
+========================================================= */
+#stage{
+  position: relative; z-index: 5;
+  width: 100%; height: 100vh; height: 100dvh;
+}
+.page{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  padding: 90px 24px 130px;
+  overflow-y: auto;
+  opacity: 0; visibility: hidden;
+  transform: translateX(60px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease), visibility 0s linear .7s;
+}
+.page.active{
+  opacity: 1; visibility: visible; transform: translateX(0);
+  transition: opacity .7s var(--ease), transform .7s var(--ease), visibility 0s linear 0s;
+}
+.page.leaving-left{ transform: translateX(-60px); }
+.page.leaving-right{ transform: translateX(60px); }
+
+.page-inner{ max-width: 900px; width: 100%; margin: 0 auto; }
+.center-content{ text-align: center; display:flex; flex-direction: column; align-items: center; }
+.center-text{ text-align: center; }
+
+/* Per-page ambient background tints, layered under content but above pure black */
+.page::before{
+  content:""; position: absolute; inset:0; z-index: -1; pointer-events:none;
+}
+#page-0::before{ background: radial-gradient(ellipse at 50% 20%, rgba(255,79,154,0.20), transparent 60%); }
+#page-1::before{ background: radial-gradient(ellipse at 50% 80%, rgba(255,133,193,0.16), transparent 60%); }
+#page-2::before{ background: radial-gradient(ellipse at 15% 50%, rgba(255,79,154,0.14), transparent 55%); }
+#page-3::before{ background: radial-gradient(ellipse at 85% 30%, rgba(255,79,154,0.16), transparent 55%); }
+#page-4::before{ background: radial-gradient(ellipse at 50% 0%, rgba(255,133,193,0.14), transparent 55%); }
+#page-5::before{ background: radial-gradient(ellipse at 50% 100%, rgba(255,79,154,0.16), transparent 55%); }
+#page-6::before{ background: radial-gradient(ellipse at 50% 30%, rgba(255,79,154,0.22), transparent 55%); }
+#page-7::before{ background: radial-gradient(ellipse at 50% 50%, rgba(255,133,193,0.14), transparent 60%); }
+#page-8::before{ background: radial-gradient(ellipse at 50% 30%, rgba(255,79,154,0.20), transparent 60%); }
+
+/* =========================================================
+   TYPOGRAPHY
+========================================================= */
+.script-title{ font-family: 'Great Vibes', cursive; color: var(--pink-light); line-height: 1.15; margin: 0 0 6px; }
+.script-title.big{ font-size: var(--fs-script-xl); }
+.section-title{ font-family: 'Poppins', sans-serif; font-weight: 600; font-size: var(--fs-h2); margin: 0 0 26px; color: var(--white); }
+.eyebrow{ text-transform: uppercase; letter-spacing: 0.28em; font-size: 0.7rem; color: var(--pink-light); margin: 0 0 10px; font-weight: 500; }
+.lead{ font-size: var(--fs-lead); color: var(--white-dim); max-width: 560px; margin: 14px auto; }
+.sweet-note{ font-size: var(--fs-body); color: var(--white-dim); max-width: 560px; margin: 6px auto 30px; font-style: italic; line-height: 1.8; }
+.heart-accent{ font-size: 1.6rem; display:inline-block; animation: heartbeat 1.4s ease-in-out infinite; margin: 6px 0 10px; }
+.hint-text{ font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 26px; }
+.hint-text code{ background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; }
+.final-note{ font-size: var(--fs-body); color: var(--white-dim); max-width: 560px; margin: 40px auto 0; }
+
+@keyframes heartbeat{
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.2); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.15); }
+}
+.heartbeat{ animation: heartbeat 1.3s ease-in-out infinite; display: inline-block; }
+.pulse{ animation: pulseGlow 1.8s ease-in-out infinite; }
+@keyframes pulseGlow{
+  0%,100%{ text-shadow: 0 0 18px rgba(255,79,154,0.5); }
+  50%{ text-shadow: 0 0 34px rgba(255,79,154,0.9); }
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+.btn-primary{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600; font-size: 0.95rem;
+  color: #fff; background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+  border: none; border-radius: 50px;
+  padding: 15px 34px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 8px 24px rgba(255,79,154,0.4);
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+  margin-top: 10px;
+}
+.btn-primary:hover{ transform: translateY(-3px) scale(1.03); box-shadow: 0 14px 34px rgba(255,79,154,0.55); }
+.btn-primary:active{ transform: translateY(0) scale(0.98); }
+.glow{ position: relative; }
+.glow::after{
+  content:""; position: absolute; inset: -6px; border-radius: 50px;
+  background: radial-gradient(circle, rgba(255,79,154,0.55), transparent 70%);
+  z-index: -1; animation: glowPulse 2.4s ease-in-out infinite;
+}
+@keyframes glowPulse{ 0%,100%{ opacity: .5; transform: scale(1);} 50%{ opacity: .9; transform: scale(1.08);} }
+
+/* =========================================================
+   REVEAL ON ENTER ANIMATION (also used for scroll reveal)
+========================================================= */
+.reveal{
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+.reveal.in{ opacity: 1; transform: translateY(0); }
+
+/* =========================================================
+   PAGE 2 — COUNTDOWN
+========================================================= */
+.countdown-wrap{ display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 20px 0 10px; }
+.countdown-box{
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  border-radius: 18px; padding: 20px 18px; min-width: 84px;
+  box-shadow: var(--shadow-soft);
+  display:flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.countdown-num{ font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 700; color: var(--white-light); text-shadow: 0 0 20px rgba(0, 0, 0, 0.975); font-variant-numeric: tabular-nums; }
+.countdown-label{ font-size: 0.7rem; text-transform: uppercase; letter-spacing: .16em; color: var(--white-dim); }
+
+/* =========================================================
+   PAGE 3 — LETTER-STYLE WISH PARAGRAPHS
+========================================================= */
+/* Page 3 uses a tighter layout + its own scroll area so the whole
+   section fits inside a normal viewport at 100% browser zoom. */
+#page-2 .page-inner{ height: 100%; display: flex; flex-direction: column; }
+#page-2 .eyebrow, #page-2 .script-title{ flex-shrink: 0; }
+#page-2 .script-title.big{ font-size: clamp(2.34rem, 7.2vw, 4.68rem); }
+
+.letter-paragraphs{
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  border-radius: 20px; padding: clamp(18px, 3vw, 34px);
+  box-shadow: var(--shadow-soft);
+  max-height: 56vh;
+  overflow-y: auto;
+}
+.letter-paragraphs p{
+  font-size: clamp(0.82rem, 1.3vw, 0.95rem); line-height: 1.65; color: var(--white-dim);
+  margin: 0 0 14px;
+}
+.letter-paragraphs p:last-child{ margin-bottom: 0; }
+.mini-heart{ font-size: 0.85em; margin: 0 2px; }
+
+@media (max-width: 780px){
+  .letter-paragraphs{ max-height: 50vh; padding: 18px; }
+  .letter-paragraphs p{ font-size: 0.85rem; line-height: 1.6; margin-bottom: 12px; }
+}
+
+/* =========================================================
+   PAGE 4 — 3 PHOTO GRID
+========================================================= */
+.three-photo-grid{
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px;
+}
+@media (max-width: 780px){ .three-photo-grid{ grid-template-columns: 1fr; } }
+.photo-card{ margin: 0; text-align: center; }
+.photo-frame{
+  border-radius: 18px; overflow: hidden;
+  border: 3px solid rgba(255,255,255,0.12);
+  box-shadow: var(--shadow-soft);
+  aspect-ratio: 4/5;
+}
+.photo-frame img{
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .6s var(--ease);
+}
+.photo-card:hover .photo-frame img{ transform: scale(1.12) rotate(1deg); }
+.photo-card figcaption{
+  margin-top: 12px; font-size: 0.85rem; color: var(--white-dim); font-style: italic;
+}
+
+/* =========================================================
+   PAGE 5 — GALLERY GRID (8 photos)
+========================================================= */
+.gallery-grid{
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+}
+@media (max-width: 900px){ .gallery-grid{ grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px){ .gallery-grid{ grid-template-columns: repeat(2, 1fr); } }
+.gallery-item{
+  border-radius: 16px; overflow: hidden; aspect-ratio: 1/1;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.gallery-item img{ width:100%; height:100%; object-fit: cover; transition: transform .5s var(--ease); }
+.gallery-item:hover img{ transform: scale(1.15); }
+
+/* =========================================================
+   PAGE 6 — VIDEO GRID
+   Layout ini pakai pola yang sama dengan page surat (#page-2) dan
+   timeline (#page-7): section-nya sendiri yang scroll secara internal
+   (max-height + overflow-y), bukan mengandalkan browser di-zoom out.
+   Grid pakai auto-fill supaya jumlah video berapa pun otomatis
+   menyusun kolom & baris tambahan dengan ukuran kartu yang konsisten.
+========================================================= */
+#page-5 .page-inner{ height: 100%; display: flex; flex-direction: column; }
+#page-5 .eyebrow, #page-5 .script-title{ flex-shrink: 0; }
+#page-5 .script-title.big{ font-size: clamp(1.7rem, 4.5vw, 2.8rem); margin-bottom: 12px; }
+
+.video-grid-wrap{
+  max-height: 58vh;
+  overflow-y: auto;
+  padding: 4px 6px;
+}
+
+.video-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 200px));
+  justify-content: center;
+  gap: 18px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.video-item{
+  border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: transform .4s var(--ease);
+}
+.video-item:hover{ transform: scale(1.04); }
+.video-item video{ width: 100%; display: block; aspect-ratio: 9/16; object-fit: cover; background:#000; }
+
+@media (max-width: 780px){
+  .video-grid-wrap{ max-height: 52vh; }
+  .video-grid{ grid-template-columns: repeat(auto-fit, minmax(120px, 160px)); gap: 12px; }
+}
+@media (max-width: 480px){
+  .video-grid{ grid-template-columns: repeat(2, minmax(120px, 1fr)); max-width: 320px; gap: 10px; }
+}
+
+/* =========================================================
+   PAGE 7 — LOVE LETTER / ENVELOPE
+========================================================= */
+#envelope-wrap{ display:flex; flex-direction: column; align-items: center; gap: 30px; }
+.envelope{
+  position: relative; width: min(360px, 82vw); height: 240px;
+  perspective: 1200px;
+}
+.envelope-back{
+  position: absolute; inset: 0; border-radius: 10px;
+  background: linear-gradient(160deg, var(--pink-deep), #6b1b3d);
+  box-shadow: var(--shadow-soft);
+}
+.envelope-front-left, .envelope-front-right{
+  position: absolute; bottom: 0; width: 0; height: 0;
+  border-style: solid; z-index: 3;
+}
+.envelope-front-left{
+  left: 0; border-width: 120px 180px 0 0; border-color: transparent #4a1330 transparent transparent;
+}
+.envelope-front-right{
+  right: 0; border-width: 0 0 120px 180px; border-color: transparent transparent transparent #4a1330;
+}
+.envelope-flap{
+  position: absolute; top: 0; left: 0; width: 100%; height: 130px;
+  background: linear-gradient(160deg, var(--pink), var(--pink-deep));
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  transition: transform .9s var(--ease);
+  z-index: 4;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+}
+.envelope.open .envelope-flap{ transform: rotateX(180deg); }
+.envelope-seal{
+  position: absolute; top: 46%; left: 50%; transform: translate(-50%,-50%);
+  width: 46px; height: 46px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--pink-light), var(--pink-deep));
+  display: flex; align-items: center; justify-content: center; color:#fff; font-size: 1.1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  z-index: 5; transition: opacity .3s ease, transform .5s ease;
+}
+.envelope.open .envelope-seal{ opacity: 0; transform: translate(-50%,-50%) scale(0.4); }
+.envelope-letter{
+  position: absolute; left: 6%; right: 6%; bottom: 6%;
+  width: 88%; height: 0; overflow: hidden;
+  background: #F3E1E4; border-radius: 8px; z-index: 2;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  transition: height .8s var(--ease) .3s, top .8s var(--ease) .3s, z-index 0s .3s;
+}
+.envelope.open .envelope-letter{
+  height: 320px; top: -170px; bottom: auto;
+  z-index: 6; /* above front-left/right (3), flap (4) and seal (5) so text is never clipped */
+}
+.envelope-letter-inner{ padding: 22px 20px; height: 100%; overflow-y: auto; }
+#typewriter-text{
+  color: var(--black); font-size: 0.92rem; line-height: 1.8; margin: 0 0 14px;
+  white-space: pre-wrap;
+  text-align: left;
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+#letter-signature{ color: var(--pink-deep); font-family: 'Great Vibes', cursive; font-size: 1.6rem; text-align: right; margin: 0; }
+
+/* =========================================================
+   PAGE 8 — TIMELINE
+========================================================= */
+#page-8 .page-inner{ display: flex; flex-direction: column; align-items: center; }
+#page-8 .script-title.big{
+  font-size: clamp(2.08rem, 6.4vw, 4.16rem); /* 80% dari ukuran asli (2.6rem/8vw/5.2rem) */
+}
+#page-7 .eyebrow, #page-7 .script-title{ flex-shrink: 0; }
+#page-7 .script-title.big{ font-size: clamp(1.7rem, 4.5vw, 2.8rem); margin-bottom: 12px; }
+
+.timeline{
+  position: relative; max-width: 640px; margin: 0 auto; width: 100%;
+  padding: 4px 6px 4px 6px;
+  max-height: 46vh;
+  overflow-y: auto;
+}
+.timeline::before{
+  content:""; position: absolute; left: 24px; top: 6px; bottom: 6px; width: 2px;
+  background: linear-gradient(var(--pink), rgba(255,79,154,0.05));
+}
+.timeline-item{
+  display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; position: relative;
+}
+.timeline-icon{
+  flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%;
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.05rem; box-shadow: var(--shadow-soft); z-index: 2;
+}
+.timeline-content{
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  border-radius: 12px; padding: 10px 16px; flex: 1;
+  backdrop-filter: blur(var(--glass-blur));
+}
+.timeline-content h3{
+  margin: 0 0 4px; font-size: 0.88rem; font-weight: 600; color: var(--pink-light);
+}
+.timeline-content p{ margin: 0; font-size: 0.8rem; line-height: 1.5; color: var(--white-dim); }
+
+.final-note{ font-size: 0.85rem; flex-shrink: 0; margin: 20px auto 0; }
+
+@media (max-width: 780px){
+  .timeline{ max-height: 42vh; }
+  .timeline-item{ gap: 10px; margin-bottom: 12px; }
+  .timeline-icon{ width: 36px; height: 36px; font-size: 0.9rem; }
+  .timeline-content{ padding: 8px 12px; }
+}
+
+/* =========================================================
+   PAGE 9 — SPECIAL VIDEO MESSAGE
+========================================================= */
+#page-8 .page-inner{ display: flex; flex-direction: column; align-items: center; }
+
+.special-video-wrap{
+  width: min(230px, 90vw);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(255,255,255,0.12);
+  margin: 14px 0 20px;
+}
+.special-video-wrap video{
+  width: 100%;
+  display: block;
+  aspect-ratio: 9/16;
+  object-fit: cover;
+  background: #000;
+}
+
+@media (max-width: 780px){
+  .special-video-wrap{ width: min(340px, 88vw); margin: 10px 0 16px; }
+}
+
+/* =========================================================
+   NAVIGATION (Prev / Next)
+========================================================= */
+#page-nav{
+  position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+  z-index: 150;
+  display: flex; align-items: center; gap: 18px;
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  padding: 10px 18px; border-radius: 50px;
+  box-shadow: var(--shadow-soft);
+}
+.nav-btn{
+  display: flex; align-items: center; gap: 6px;
+  background: transparent; border: none; color: var(--white);
+  font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 500;
+  cursor: pointer; padding: 8px 12px; border-radius: 30px;
+  transition: background .3s ease, color .3s ease;
+}
+.nav-btn:hover{ background: var(--pink); color: #fff; }
+.nav-btn svg{ width: 16px; height: 16px; fill:none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.nav-btn:disabled{ opacity: 0.3; cursor: default; pointer-events: none; }
+#nav-count{ font-size: 0.8rem; color: var(--white-dim); min-width: 44px; text-align: center; }
+@media (max-width: 500px){
+  #page-nav{ gap: 8px; padding: 8px 12px; }
+  .nav-btn span{ display: none; }
+  .nav-btn{ padding: 10px; }
+}
+
+/* =========================================================
+   CONFETTI CANVAS
+========================================================= */
+#confetti-canvas{
+  position: fixed; inset: 0; z-index: 300; pointer-events: none;
+  display: none;
+}
+
+/* =========================================================
+   SCROLLBAR (subtle, on-theme)
+========================================================= */
+.page::-webkit-scrollbar,
+.envelope-letter-inner::-webkit-scrollbar,
+.letter-paragraphs::-webkit-scrollbar,
+.timeline::-webkit-scrollbar,
+.video-grid-wrap::-webkit-scrollbar{
+  width: 5px;
+}
+.page::-webkit-scrollbar-thumb,
+.envelope-letter-inner::-webkit-scrollbar-thumb,
+.letter-paragraphs::-webkit-scrollbar-thumb,
+.timeline::-webkit-scrollbar-thumb,
+.video-grid-wrap::-webkit-scrollbar-thumb{
+  background: rgba(255,79,154,0.35);
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+.page::-webkit-scrollbar-thumb:hover,
+.envelope-letter-inner::-webkit-scrollbar-thumb:hover,
+.letter-paragraphs::-webkit-scrollbar-thumb:hover,
+.timeline::-webkit-scrollbar-thumb:hover,
+.video-grid-wrap::-webkit-scrollbar-thumb:hover{
+  background: rgba(255,79,154,0.6);
+}
+.page::-webkit-scrollbar-track,
+.envelope-letter-inner::-webkit-scrollbar-track,
+.letter-paragraphs::-webkit-scrollbar-track,
+.timeline::-webkit-scrollbar-track,
+.video-grid-wrap::-webkit-scrollbar-track{
+  background: transparent;
+}
+
+/* Firefox */
+.page,
+.envelope-letter-inner,
+.letter-paragraphs,
+.timeline,
+.video-grid-wrap{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.2s !important; }
+}
+
+/* =========================================================
+   SMALL SCREEN GLOBAL ADJUSTMENTS
+========================================================= */
+@media (max-width: 480px){
+  .page{ padding: 80px 16px 150px; }
+  .countdown-box{ min-width: 70px; padding: 14px 10px; }
+}

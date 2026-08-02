@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Happy Birthday My Love ❤️</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="C:\bday-website(2)\bday-website\images\hbd.jpg">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= LOADING SCREEN ================= -->
+<div id="loading-screen">
+  <div class="loader-heart">
+    <svg viewBox="0 0 32 29" class="loader-heart-svg">
+      <path d="M16 29 C16 29 0 18.5 0 8.8 C0 3.9 3.9 0 8.7 0 C11.7 0 14.3 1.6 16 4 C17.7 1.6 20.3 0 23.3 0 C28.1 0 32 3.9 32 8.8 C32 18.5 16 29 16 29 Z"/>
+    </svg>
+  </div>
+  <p class="loader-text">Menyiapkan sesuatu yang spesial<span class="dots"><span>.</span><span>.</span><span>.</span></span></p>
+</div>
+
+<!-- ================= CUSTOM CURSOR ================= -->
+<div id="custom-cursor" aria-hidden="true">❤</div>
+
+<!-- ================= AMBIENT BACKGROUND (floating hearts + sparkles) ================= -->
+<div id="ambient-bg" aria-hidden="true"></div>
+
+<!-- ================= SCROLL / PROGRESS BAR (page progress) ================= -->
+<div id="page-progress-track">
+  <div id="page-progress-fill"></div>
+</div>
+
+<!-- ================= MUSIC PLAYER ================= -->
+<audio id="bg-music" src="C:\bday-website(2)\bday-website\serta mulia.mp3"loop preload="auto"></audio>
+<div id="music-player">
+  <button id="music-toggle" aria-label="Play atau pause musik" title="Play / Pause">
+    <svg id="icon-note" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+  </button>
+  <input id="music-volume" type="range" min="0" max="1" step="0.01" value="0.5" aria-label="Volume musik">
+</div>
+
+<!-- ================= BACK TO TOP ================= -->
+<button id="back-to-top" aria-label="Kembali ke atas">
+  <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<!-- ================= DOT INDICATOR ================= -->
+<div id="dot-indicator">
+  <span class="dot active" data-goto="0"></span>
+  <span class="dot" data-goto="1"></span>
+  <span class="dot" data-goto="2"></span>
+  <span class="dot" data-goto="3"></span>
+  <span class="dot" data-goto="4"></span>
+  <span class="dot" data-goto="5"></span>
+  <span class="dot" data-goto="6"></span>
+  <span class="dot" data-goto="7"></span>
+   <span class="dot" data-goto="8"></span>
+</div>
+
+<!-- ================= MAIN STAGE ================= -->
+<main id="stage">
+
+  <!-- ============ PAGE 1 - WELCOME ============ -->
+  <section class="page" id="page-0" data-bg="welcome">
+    <div class="page-inner center-content">
+      <p class="eyebrow reveal">Untukmu hari ini</p>
+      <h1 class="script-title big reveal">Welcome</h1>
+      <span class="heart-accent reveal">❤️</span>
+      <p class="lead reveal">Selamat datang di sebuah hadiah kecil yang kubuat khusus untuk wanita paling spesial di hidupku.</p>
+      <p class="sweet-note reveal">Setelah waktu menunjukan pukul 12 malam bukan hanya tentang bertambahnya usiamu, tetapi tentang rasa syukurku karena Tuhan menghadirkanmu dalam hidupku. Semoga senyummu selalu menjadi alasan bahagiaku setiap hari.</p>
+      <button class="btn-primary glow reveal" id="open-gift-btn">
+        <span>Buka Hadiah</span> 🎁
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 2 - COUNTDOWN ============ -->
+  <section class="page" id="page-1" data-bg="countdown">
+    <div class="page-inner center-content">
+      <p class="eyebrow reveal">Waktu terus berjalan</p>
+      <h2 class="script-title big reveal center-text">Menuju Hari Spesialmu</h2>
+
+      <div class="countdown-wrap reveal" id="countdown-wrap">
+        <div class="countdown-box">
+          <span class="countdown-num" id="cd-days">00</span>
+          <span class="countdown-label">Hari</span>
+        </div>
+        <div class="countdown-box">
+          <span class="countdown-num" id="cd-hours">00</span>
+          <span class="countdown-label">Jam</span>
+        </div>
+        <div class="countdown-box">
+          <span class="countdown-num" id="cd-minutes">00</span>
+          <span class="countdown-label">Menit</span>
+        </div>
+        <div class="countdown-box">
+          <span class="countdown-num" id="cd-seconds">00</span>
+          <span class="countdown-label">Detik</span>
+        </div>
+      </div>
+
+      <div id="countdown-finished" class="hidden">
+        <h2 class="script-title big pulse">Happy Birthday Sayanggg ❤️</h2>
+      </div>
+
+      
+    </div>
+  </section>
+
+  <!-- ============ PAGE 3 - UCAPAN ============ -->
+  <section class="page" id="page-2" data-bg="wish">
+    <div class="page-inner">
+      <p class="eyebrow reveal center-text">Dari hatiku</p>
+      <h2 class="script-title big reveal center-text">Happy Birthday My Beautiful Girl</h2>
+
+      <div class="letter-paragraphs">
+        <p class="reveal">Setiap hari yang kulalui bersamamu terasa seperti anugerah yang tak pernah kubayangkan sebelumnya. <span class="mini-heart">🤍</span> Aku bersyukur, dari semua orang di dunia ini, semesta mempertemukanku denganmu.</p>
+        <p class="reveal">Di hari spesialmu ini, aku berdoa semoga kesehatanmu selalu dijaga oleh-Nya. <span class="mini-heart">🤍</span> Semoga tubuhmu selalu kuat, hatimu selalu tenang, dan harimu selalu dipenuhi energi baik.</p>
+        <p class="reveal">Aku juga berharap setiap impian yang kamu simpan diam-diam di hatimu, satu per satu bisa kamu raih. <span class="mini-heart">🤍</span> Aku ingin menjadi salah satu orang yang menyaksikan semua itu terjadi, tepat di sampingmu.</p>
+        <p class="reveal">Semoga kebahagiaan selalu menyertaimu bersama keluarga tercinta. <span class="mini-heart">🤍</span> Karena aku tahu, senyum yang paling tulus darimu selalu lahir dari waktu-waktu bersama mereka.</p>
+        <p class="reveal">Semoga kamu selalu dikelilingi oleh orang-orang baik, yang menyayangimu dengan tulus, yang menjagamu tanpa syarat. <span class="mini-heart">🤍</span> Dan aku ingin selalu menjadi salah satunya.</p>
+        <p class="reveal">Terima kasih sudah hadir dalam hidupku. <span class="mini-heart">🤍</span> Terima kasih untuk setiap tawa, setiap cerita panjang, dan setiap kesabaranmu menghadapiku.</p>
+        <p class="reveal">Aku berharap hubungan kita akan terus tumbuh, semakin dewasa, semakin kuat, dan semakin langgeng seiring waktu. <span class="mini-heart">🤍</span> Melewati apapun bersama, selalu bersama.</p>
+        <p class="reveal">Selamat ulang tahun, sayang. <span class="mini-heart">🤍</span> Terima kasih sudah menjadi rumah paling hangat yang pernah kutemukan. Aku mencintaimu, hari ini dan seterusnya.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 4 - 3 FOTO KENANGAN ============ -->
+  <section class="page" id="page-3" data-bg="memories3">
+    <div class="page-inner">
+      <p class="eyebrow reveal center-text">Tiga momen</p>
+      <h2 class="script-title big reveal center-text">Every Chapter of You</h2>
+
+      <div class="three-photo-grid">
+        <figure class="photo-card reveal">
+          <div class="photo-frame">
+            <img src="C:\bday-website(2)\bday-website\images\kecil.jpeg" alt="Kecilmu menggemaskan" loading="lazy">
+          </div>
+          <figcaption>Kecilmu menggemaskan</figcaption>
+        </figure>
+        <figure class="photo-card reveal">
+          <div class="photo-frame">
+            <img src="C:\bday-website(2)\bday-website\images\besar.jpeg" alt="Cantikmu tak pernah pudar" loading="lazy">
+          </div>
+          <figcaption>Cantikmu tak pernah pudar</figcaption>
+        </figure>
+        <figure class="photo-card reveal">
+          <div class="photo-frame">
+            <img src="C:\bday-website(2)\bday-website\images\GEDEEE.jpeg" alt="Senyummu, favoritku selamanya. ❤️" loading="lazy">
+          </div>
+          <figcaption>Senyummu, favoritku selamanya ❤️</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 5 - GALERI ============ -->
+  <section class="page" id="page-4" data-bg="gallery">
+    <div class="page-inner">
+      <p class="eyebrow reveal center-text">Sekeping demi sekeping</p>
+      <h2 class="script-title big reveal center-text">Our Memories</h2>
+      
+      <div class="gallery-grid" id="galleryGrid">
+    <div class="gallery-item reveal"><img src="C:\bday-website(2)\bday-website\images\1.jpeg" alt="Kenangan 1" loading="lazy"></div>
+    <div class="gallery-item reveal"><img src="C:\bday-website(2)\bday-website\images\2.jpeg" alt="Kenangan 2" loading="lazy"></div>
+    <div class="gallery-item reveal"><img src="C:\bday-website(2)\bday-website\images\3.jpeg" alt="Kenangan 3" loading="lazy"></div>
+    <div class="gallery-item reveal"><img src="C:\bday-website(2)\bday-website\images\4.jpeg" alt="Kenangan 4" loading="lazy"></div>
+    <div class="gallery-item reveal"><img src="C:\bday-website(2)\bday-website\images\bioskop.jpeg"loading="lazy"></div>
+    <div class="gallery-item reveal"><img src="C:\bday-website(2)\bday-website\images\umasei1.jpeg"loading="lazy"></div>
+    <div class="gallery-item reveal"><img src= "C:\bday-website(2)\bday-website\images\umasei2.jpeg"loading="lazy"></div>
+    <div class="gallery-item reveal"><img src= "C:\bday-website(2)\bday-website\images\umasei3.jpeg"loading="lazy"></div>
+     </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 6 - VIDEO KENANGAN ============ -->
+  <section class="page" id="page-5" data-bg="video">
+    <div class="page-inner">
+      <p class="eyebrow reveal center-text">Bergerak, hidup, nyata</p>
+      <h2 class="script-title big reveal center-text">Precious Moments</h2>
+
+      <div class="video-grid">
+        <div class="video-item reveal">
+          <video src="C:\bday-website(2)\bday-website\images\fotobox.mp4" controls playsinline preload="metadata" muted></video>
+        </div>
+        <div class="video-item reveal">
+          <video src="C:\bday-website(2)\bday-website\images\ketoprak.mp4" controls playsinline preload="metadata" muted></video>
+        </div>
+        <div class="video-item reveal">
+          <video src="C:\bday-website(2)\bday-website\images\umasei.mp4" controls playsinline preload="metadata" muted></video>
+        </div>
+        <div class="video-item reveal">
+          <video src="C:\bday-website(2)\bday-website\images\sakuta.mp4" controls playsinline preload="metadata" muted></video>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 7 - SURAT CINTA ============ -->
+  <section class="page" id="page-6" data-bg="letter">
+    <div class="page-inner center-content">
+      <p class="eyebrow reveal">Sepucuk surat</p>
+      <h2 class="script-title big reveal">A Letter For You</h2>
+
+      <div id="envelope-wrap" class="reveal">
+        <div id="envelope" class="envelope">
+          <div class="envelope-back"></div>
+          <div class="envelope-letter">
+            <div class="envelope-letter-inner">
+              <p id="typewriter-text"></p>
+              <p id="letter-signature" class="hidden heartbeat">I Love You Forever ❤️</p>
+            </div>
+          </div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-front-left"></div>
+          <div class="envelope-front-right"></div>
+          <div class="envelope-seal">❤</div>
+        </div>
+        <button id="open-letter-btn" class="btn-primary glow">Buka Surat</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 8 - TIMELINE ============ -->
+  <section class="page" id="page-7" data-bg="timeline">
+  <div class="page-inner">
+    <p class="eyebrow reveal center-text">Kisah kita</p>
+    <h2 class="script-title big reveal center-text">Our Love Story</h2>
+
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-icon">❤️</div>
+        <div class="timeline-content">
+          <h3>Awal Berkenalan</h3>
+          <p>Saling mengikuti sejak lama, dipertemukan setelah lulus. 🤍</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-icon">💬</div>
+        <div class="timeline-content">
+          <h3>Mulai Sering Chat</h3>
+          <p>Berawal dari obrolan sederhana, berakhir jadi kebiasaan setiap hari. 🤍</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-icon">📍</div>
+        <div class="timeline-content">
+          <h3>Pertama Kali Bertemu</h3>
+          <p>Hari itu, kisah kita dimulai. 🤍</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-icon">🥰</div>
+        <div class="timeline-content">
+          <h3>Mulai Dekat</h3>
+          <p>Dari obrolan sederhana, lahirlah rasa nyaman. 🤍</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-icon">💕</div>
+        <div class="timeline-content">
+          <h3>Jadian</h3>
+          <p>Hari di mana dua hati memilih berjalan bersama. 🤍</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-icon">🎂</div>
+        <div class="timeline-content">
+          <h3>Merayakan Ulang Tahun Bersama</h3>
+          <p>Dan sekarang, di sinilah kita — merayakan bersama.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-icon">∞</div>
+        <div class="timeline-content">
+          <p>Dan semoga perjalanan ini tidak pernah berhenti.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="final-note reveal center-text">Terima kasih sudah menjadi bagian terindah dari hidupku. Selamat ulang tahun, cintaku. ❤️</p>
+  </div>
+</section>
+<!-- ============ PAGE 9 - VIDEO UCAPAN SPESIAL ============ -->
+  <section class="page" id="page-8" data-bg="specialvideo">
+    <div class="page-inner center-content">
+      <p class="eyebrow reveal">Sebuah pesan khusus</p>
+      <h2 class="script-title big reveal">Untukmu, Langsung Dari Hatiku</h2>
+
+      <div class="special-video-wrap reveal">
+        <video src="C:\bday-website(2)\bday-website\images\spesial.mp4" controls playsinline preload="metadata"></video>
+      </div>
+
+      <p class="lead reveal">Tonton video ini ya sayang, ada yang ingin aku sampaikan langsung. ❤️</p>
+    </div>
+  </section>
+
+<!-- ================= NAVIGATION ================= -->
+<nav id="page-nav">
+  <button id="nav-prev" class="nav-btn" aria-label="Halaman sebelumnya">
+    <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    <span>Previous</span>
+  </button>
+  <span id="nav-count"><span id="nav-current">1</span> / 9</span>
+  <button id="nav-next" class="nav-btn" aria-label="Halaman berikutnya">
+    <span>Next</span>
+    <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+</nav>
+
+<!-- Confetti canvas -->
+<canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+<script src="script.js"></script>
+</body>
+</html>
