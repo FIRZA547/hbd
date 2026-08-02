@@ -311,26 +311,62 @@ I love you more than yesterday, and I'll love you even more tomorrow. Selamat ul
   const musicVolume = document.getElementById('music-volume');
   bgMusic.volume = 0.5;
 
+  // Browser modern (terutama Chrome/Safari di HP) memblokir autoplay audio
+  // yang ada suaranya sebelum ada interaksi apapun dari user di halaman.
+  // Strategi di bawah ini membuat musik tetap "langsung jalan" begitu
+  // halaman kebuka (walau sementara di-mute), lalu otomatis di-unmute
+  // begitu ada interaksi PERTAMA APAPUN (klik/tap/scroll/keydown) di
+  // manapun di halaman — jadi user nggak perlu klik tombol musik dulu.
+  let audioUnlocked = false;
+
+  const UNLOCK_EVENTS = ['click', 'touchstart', 'keydown', 'scroll', 'pointerdown'];
+
+  function removeUnlockListeners(){
+    UNLOCK_EVENTS.forEach(evt => window.removeEventListener(evt, unlockAudio));
+  }
+
+  function unlockAudio(){
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+    bgMusic.muted = false;
+    bgMusic.play().then(() => musicToggle.classList.add('playing')).catch(() => {});
+    removeUnlockListeners();
+  }
+
   function tryAutoplay(){
-    const p = bgMusic.play();
-    if (p !== undefined) {
-      p.then(() => musicToggle.classList.add('playing'))
-       .catch(() => {
-          // autoplay diblokir browser — tunggu interaksi pertama
-          const resumeOnInteract = () => {
-            bgMusic.play().then(() => musicToggle.classList.add('playing')).catch(()=>{});
-            window.removeEventListener('click', resumeOnInteract);
-            window.removeEventListener('touchstart', resumeOnInteract);
-          };
-          window.addEventListener('click', resumeOnInteract, { once: true });
-          window.addEventListener('touchstart', resumeOnInteract, { once: true });
-       });
+    // 1) Coba dulu autoplay dengan suara (beberapa browser desktop mengizinkan ini)
+    bgMusic.muted = false;
+    const playPromise = bgMusic.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          audioUnlocked = true;
+          musicToggle.classList.add('playing');
+        })
+        .catch(() => {
+          // 2) Kalau diblokir, autoplay dalam kondisi muted — ini SELALU
+          //    diizinkan browser, jadi musik tetap langsung "jalan" (senyap)
+          //    sejak halaman terbuka, lalu unmute otomatis di interaksi pertama.
+          bgMusic.muted = true;
+          bgMusic.play()
+            .then(() => musicToggle.classList.add('playing'))
+            .catch(() => {});
+          UNLOCK_EVENTS.forEach(evt => {
+            window.addEventListener(evt, unlockAudio, { passive: true });
+          });
+        });
     }
   }
+
   window.addEventListener('load', tryAutoplay);
+  // fallback jika event 'load' sudah lewat saat script ini jalan
+  if (document.readyState === 'complete') tryAutoplay();
 
   musicToggle.addEventListener('click', () => {
+    audioUnlocked = true;
+    removeUnlockListeners();
     if (bgMusic.paused) {
+      bgMusic.muted = false;
       bgMusic.play();
       musicToggle.classList.add('playing');
     } else {
