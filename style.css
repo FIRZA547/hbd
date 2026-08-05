@@ -406,7 +406,7 @@ a{ color: var(--pink-light); }
   margin-top: 12px; font-size: 0.85rem; color: var(--white-dim); font-style: italic;
 }
 
-@media (max-width: 600px){
+@media (max-width: 500px){
   .three-photo-grid{
     grid-template-columns: 1fr;
     gap: 18px;
