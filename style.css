@@ -350,11 +350,21 @@ a{ color: var(--pink-light); }
 
 /* =========================================================
    PAGE 4 — 3 PHOTO GRID
+   Semua foto + teks dibuat muat dalam satu layar tanpa scroll,
+   baik di desktop maupun mobile.
 ========================================================= */
+#page-3.page{ padding: 70px 20px 100px; }
+#page-3 .page-inner{ height: 100%; display: flex; flex-direction: column; justify-content: center; }
+#page-3 .eyebrow, #page-3 .script-title{ flex-shrink: 0; }
+#page-3 .script-title.big{ margin-bottom: 4px; }
+
+.three-photo-grid-wrap{
+  overflow: visible; /* tidak lagi jadi area scroll sendiri */
+}
+
 .three-photo-grid{
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px;
 }
-@media (max-width: 780px){ .three-photo-grid{ grid-template-columns: 1fr; } }
 .photo-card{ margin: 0; text-align: center; }
 .photo-frame{
   border-radius: 18px; overflow: hidden;
@@ -369,6 +379,25 @@ a{ color: var(--pink-light); }
 .photo-card:hover .photo-frame img{ transform: scale(1.12) rotate(1deg); }
 .photo-card figcaption{
   margin-top: 12px; font-size: 0.85rem; color: var(--white-dim); font-style: italic;
+}
+
+@media (max-width: 780px){
+  #page-3.page{ padding: 64px 12px 84px; }
+  #page-3 .script-title.big{ font-size: clamp(1.5rem, 5.6vw, 2.2rem); }
+  #page-3 .eyebrow{ margin-bottom: 4px; font-size: 0.62rem; }
+  .three-photo-grid{
+    grid-template-columns: repeat(3, 1fr); /* tetap 3 kolom, JANGAN ditumpuk 1 kolom */
+    gap: 8px;
+  }
+  .photo-frame{ aspect-ratio: 3/4; border-width: 2px; border-radius: 10px; }
+  .photo-card figcaption{ margin-top: 5px; font-size: 0.6rem; line-height: 1.2; }
+}
+
+@media (max-width: 480px){
+  #page-3.page{ padding: 56px 10px 74px; }
+  .three-photo-grid{ gap: 6px; }
+  .photo-frame{ border-width: 1.5px; }
+  .photo-card figcaption{ margin-top: 4px; font-size: 0.55rem; }
 }
 
 /* =========================================================
