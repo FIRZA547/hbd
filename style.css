@@ -383,24 +383,46 @@ a{ color: var(--pink-light); }
    konten overflow browser otomatis fallback ke start-alignment dan
    semuanya tetap bisa di-scroll dengan normal.
 ========================================================= */
-#page-3.page{ padding: 70px 20px 100px; }
-#page-3 .page-inner{ display: flex; flex-direction: column; }
+#page-3.page{ padding: min(9vh, 90px) 20px min(9vh, 90px); }
+#page-3 .page-inner{ display: flex; flex-direction: column; align-items: center; width: 100%; }
 #page-3 .eyebrow, #page-3 .script-title{ flex-shrink: 0; }
-#page-3 .script-title.big{ margin-bottom: 4px; }
+#page-3 .eyebrow{ margin-bottom: 6px; }
+/* Judul di-scale pakai satuan vh (tinggi layar), bukan cuma vw,
+   supaya di laptop dengan jendela browser "pendek" judul otomatis
+   ikut mengecil dan tidak memakan terlalu banyak ruang vertikal. */
+#page-3 .script-title.big{ font-size: clamp(1.7rem, 5.5vh, 3.4rem); line-height: 1.1; margin-bottom: 4px; }
 
 .three-photo-grid-wrap{
-  overflow: visible; /* bukan area scroll sendiri lagi */
+  overflow: visible; /* bukan area scroll sendiri */
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
+/* Pakai flex (bukan grid 3-kolom berbasis lebar) supaya tinggi foto
+   bisa dikontrol langsung lewat .photo-frame, dan lebar mengikuti
+   otomatis lewat aspect-ratio. Ini kunci fix-nya: tinggi foto
+   ditentukan dari TINGGI LAYAR (vh), bukan dari lebar layar (vw) —
+   jadi di laptop dengan viewport "pendek" tapi lebar, foto tetap
+   otomatis mengecil supaya judul + foto + caption selalu muat dalam
+   satu layar tanpa perlu discroll. */
 .three-photo-grid{
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px;
+  display: flex; flex-wrap: nowrap; justify-content: center; align-items: flex-start;
+  gap: clamp(8px, 2vw, 26px);
+  width: 100%; max-width: 900px;
 }
-.photo-card{ margin: 0; text-align: center; }
+.photo-card{ display: flex; flex-direction: column; align-items: center; flex: 0 1 auto; min-width: 0; margin: 0; text-align: center; }
 .photo-frame{
+  /* diambil yang PALING KECIL antara batas tinggi layar (vh) dan
+     batas lebar layar (vw) supaya aman di kedua arah (layar pendek
+     ATAU layar sempit), dengan batas atas 320px biar tidak raksasa
+     di layar besar. */
+  height: clamp(90px, min(32vh, 26vw), 320px);
+  width: auto;
+  aspect-ratio: 4/5;
   border-radius: 18px; overflow: hidden;
   border: 3px solid rgba(255,255,255,0.12);
   box-shadow: var(--shadow-soft);
-  aspect-ratio: 4/5;
 }
 .photo-frame img{
   width: 100%; height: 100%; object-fit: cover;
@@ -408,26 +430,15 @@ a{ color: var(--pink-light); }
 }
 .photo-card:hover .photo-frame img{ transform: scale(1.12) rotate(1deg); }
 .photo-card figcaption{
-  margin-top: 12px; font-size: 0.85rem; color: var(--white-dim); font-style: italic;
-}
-
-@media (max-width: 780px){
-  #page-3.page{ padding: 64px 12px 84px; }
-  #page-3 .script-title.big{ font-size: clamp(1.5rem, 5.6vw, 2.2rem); }
-  #page-3 .eyebrow{ margin-bottom: 4px; font-size: 0.62rem; }
-  .three-photo-grid{
-    grid-template-columns: repeat(3, 1fr); /* tetap 3 kolom, jangan ditumpuk 1 kolom */
-    gap: 8px;
-  }
-  .photo-frame{ aspect-ratio: 3/4; border-width: 2px; border-radius: 10px; }
-  .photo-card figcaption{ margin-top: 5px; font-size: 0.6rem; line-height: 1.2; }
+  margin-top: 8px;
+  font-size: clamp(0.55rem, 1.6vh, 0.85rem);
+  color: var(--white-dim); font-style: italic;
 }
 
 @media (max-width: 480px){
-  #page-3.page{ padding: 56px 10px 74px; }
+  #page-3.page{ padding: min(7vh, 56px) 10px min(7vh, 74px); }
   .three-photo-grid{ gap: 6px; }
-  .photo-frame{ border-width: 1.5px; }
-  .photo-card figcaption{ margin-top: 4px; font-size: 0.55rem; }
+  .photo-frame{ border-width: 1.5px; border-radius: 10px; }
 }
 
 /* =========================================================
