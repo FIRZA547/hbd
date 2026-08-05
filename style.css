@@ -383,14 +383,16 @@ a{ color: var(--pink-light); }
    konten overflow browser otomatis fallback ke start-alignment dan
    semuanya tetap bisa di-scroll dengan normal.
 ========================================================= */
-#page-3.page{ padding: min(9vh, 90px) 20px min(9vh, 90px); }
+#page-3.page{ padding: min(6vh, 60px) 20px min(6vh, 60px); }
 #page-3 .page-inner{ display: flex; flex-direction: column; align-items: center; width: 100%; }
 #page-3 .eyebrow, #page-3 .script-title{ flex-shrink: 0; }
-#page-3 .eyebrow{ margin-bottom: 6px; }
+#page-3 .eyebrow{ margin-bottom: 4px; }
 /* Judul di-scale pakai satuan vh (tinggi layar), bukan cuma vw,
    supaya di laptop dengan jendela browser "pendek" judul otomatis
-   ikut mengecil dan tidak memakan terlalu banyak ruang vertikal. */
-#page-3 .script-title.big{ font-size: clamp(1.7rem, 5.5vh, 3.4rem); line-height: 1.1; margin-bottom: 4px; }
+   ikut mengecil dan tidak memakan terlalu banyak ruang vertikal.
+   Dibuat lebih ramping dari sebelumnya supaya sisa ruang vertikal
+   bisa dipakai untuk memperbesar foto. */
+#page-3 .script-title.big{ font-size: clamp(1.4rem, 4.2vh, 2.6rem); line-height: 1.1; margin-bottom: 2px; }
 
 .three-photo-grid-wrap{
   overflow: visible; /* bukan area scroll sendiri */
@@ -415,9 +417,9 @@ a{ color: var(--pink-light); }
 .photo-frame{
   /* diambil yang PALING KECIL antara batas tinggi layar (vh) dan
      batas lebar layar (vw) supaya aman di kedua arah (layar pendek
-     ATAU layar sempit), dengan batas atas 320px biar tidak raksasa
-     di layar besar. */
-  height: clamp(90px, min(32vh, 26vw), 320px);
+     ATAU layar sempit), dengan batas atas 460px biar bisa cukup
+     besar di layar besar tapi tidak sampai raksasa. */
+  height: clamp(140px, min(46vh, 32vw), 460px);
   width: auto;
   aspect-ratio: 4/5;
   border-radius: 18px; overflow: hidden;
@@ -431,12 +433,12 @@ a{ color: var(--pink-light); }
 .photo-card:hover .photo-frame img{ transform: scale(1.12) rotate(1deg); }
 .photo-card figcaption{
   margin-top: 8px;
-  font-size: clamp(0.55rem, 1.6vh, 0.85rem);
+  font-size: clamp(0.6rem, 1.7vh, 0.9rem);
   color: var(--white-dim); font-style: italic;
 }
 
 @media (max-width: 480px){
-  #page-3.page{ padding: min(7vh, 56px) 10px min(7vh, 74px); }
+  #page-3.page{ padding: min(5vh, 44px) 10px min(5vh, 56px); }
   .three-photo-grid{ gap: 6px; }
   .photo-frame{ border-width: 1.5px; border-radius: 10px; }
 }
