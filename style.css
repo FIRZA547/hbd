@@ -212,30 +212,12 @@ a{ color: var(--pink-light); }
 .page{
   position: absolute; inset: 0;
   width: 100%; height: 100%;
-  display: flex;
-  /* NOTE: "align-items: safe center" fixes a classic flexbox bug —
-     when content is taller than the viewport, a plain "center" makes
-     the overflow at the TOP unreachable by scrolling (so titles/text
-     above the fold get visually clipped on phones and there is no way
-     to scroll up to see them). "safe center" tells supporting browsers
-     to fall back to start-alignment whenever centering would overflow,
-     so the whole page becomes scrollable and nothing gets clipped.
-     The plain "center" above is kept as a fallback for older browsers
-     that don't understand the "safe" keyword. */
-  align-items: center;
-  align-items: safe center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   padding: 90px 24px 130px;
   overflow-y: auto;
   opacity: 0; visibility: hidden;
   transform: translateX(60px);
   transition: opacity .7s var(--ease), transform .7s var(--ease), visibility 0s linear .7s;
-  /* --- mobile scroll fix: makes the per-page scroll container behave
-     properly with touch gestures (iOS Safari / Android Chrome) so the
-     user can actually scroll all the way to the top/bottom --- */
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  touch-action: pan-y;
 }
 .page.active{
   opacity: 1; visibility: visible; transform: translateX(0);
@@ -353,8 +335,6 @@ a{ color: var(--pink-light); }
   box-shadow: var(--shadow-soft);
   max-height: 56vh;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
 }
 .letter-paragraphs p{
   font-size: clamp(0.82rem, 1.3vw, 0.95rem); line-height: 1.65; color: var(--white-dim);
@@ -370,21 +350,11 @@ a{ color: var(--pink-light); }
 
 /* =========================================================
    PAGE 4 — 3 PHOTO GRID
-   Semua foto + teks dibuat muat dalam satu layar tanpa scroll,
-   baik di desktop maupun mobile.
 ========================================================= */
-#page-3.page{ padding: 70px 20px 100px; }
-#page-3 .page-inner{ height: 100%; display: flex; flex-direction: column; justify-content: center; }
-#page-3 .eyebrow, #page-3 .script-title{ flex-shrink: 0; }
-#page-3 .script-title.big{ margin-bottom: 4px; }
-
-.three-photo-grid-wrap{
-  overflow: visible; /* tidak lagi jadi area scroll sendiri */
-}
-
 .three-photo-grid{
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px;
 }
+@media (max-width: 780px){ .three-photo-grid{ grid-template-columns: 1fr; } }
 .photo-card{ margin: 0; text-align: center; }
 .photo-frame{
   border-radius: 18px; overflow: hidden;
@@ -399,25 +369,6 @@ a{ color: var(--pink-light); }
 .photo-card:hover .photo-frame img{ transform: scale(1.12) rotate(1deg); }
 .photo-card figcaption{
   margin-top: 12px; font-size: 0.85rem; color: var(--white-dim); font-style: italic;
-}
-
-@media (max-width: 780px){
-  #page-3.page{ padding: 64px 12px 84px; }
-  #page-3 .script-title.big{ font-size: clamp(1.5rem, 5.6vw, 2.2rem); }
-  #page-3 .eyebrow{ margin-bottom: 4px; font-size: 0.62rem; }
-  .three-photo-grid{
-    grid-template-columns: repeat(3, 1fr); /* tetap 3 kolom, JANGAN ditumpuk 1 kolom */
-    gap: 8px;
-  }
-  .photo-frame{ aspect-ratio: 3/4; border-width: 2px; border-radius: 10px; }
-  .photo-card figcaption{ margin-top: 5px; font-size: 0.6rem; line-height: 1.2; }
-}
-
-@media (max-width: 480px){
-  #page-3.page{ padding: 56px 10px 74px; }
-  .three-photo-grid{ gap: 6px; }
-  .photo-frame{ border-width: 1.5px; }
-  .photo-card figcaption{ margin-top: 4px; font-size: 0.55rem; }
 }
 
 /* =========================================================
@@ -452,8 +403,6 @@ a{ color: var(--pink-light); }
   max-height: 58vh;
   overflow-y: auto;
   padding: 4px 6px;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
 }
 
 .video-grid{
@@ -533,7 +482,7 @@ a{ color: var(--pink-light); }
   height: 320px; top: -170px; bottom: auto;
   z-index: 6; /* above front-left/right (3), flap (4) and seal (5) so text is never clipped */
 }
-.envelope-letter-inner{ padding: 22px 20px; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.envelope-letter-inner{ padding: 22px 20px; height: 100%; overflow-y: auto; }
 #typewriter-text{
   color: var(--black); font-size: 0.92rem; line-height: 1.8; margin: 0 0 14px;
   white-space: pre-wrap;
@@ -559,8 +508,6 @@ a{ color: var(--pink-light); }
   padding: 4px 6px 4px 6px;
   max-height: 46vh;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
 }
 .timeline::before{
   content:""; position: absolute; left: 24px; top: 6px; bottom: 6px; width: 2px;
@@ -664,16 +611,14 @@ a{ color: var(--pink-light); }
 .envelope-letter-inner::-webkit-scrollbar,
 .letter-paragraphs::-webkit-scrollbar,
 .timeline::-webkit-scrollbar,
-.video-grid-wrap::-webkit-scrollbar,
-.three-photo-grid-wrap::-webkit-scrollbar{
+.video-grid-wrap::-webkit-scrollbar{
   width: 5px;
 }
 .page::-webkit-scrollbar-thumb,
 .envelope-letter-inner::-webkit-scrollbar-thumb,
 .letter-paragraphs::-webkit-scrollbar-thumb,
 .timeline::-webkit-scrollbar-thumb,
-.video-grid-wrap::-webkit-scrollbar-thumb,
-.three-photo-grid-wrap::-webkit-scrollbar-thumb{
+.video-grid-wrap::-webkit-scrollbar-thumb{
   background: rgba(255,79,154,0.35);
   border-radius: 10px;
   border: 1px solid transparent;
@@ -683,16 +628,14 @@ a{ color: var(--pink-light); }
 .envelope-letter-inner::-webkit-scrollbar-thumb:hover,
 .letter-paragraphs::-webkit-scrollbar-thumb:hover,
 .timeline::-webkit-scrollbar-thumb:hover,
-.video-grid-wrap::-webkit-scrollbar-thumb:hover,
-.three-photo-grid-wrap::-webkit-scrollbar-thumb:hover{
+.video-grid-wrap::-webkit-scrollbar-thumb:hover{
   background: rgba(255,79,154,0.6);
 }
 .page::-webkit-scrollbar-track,
 .envelope-letter-inner::-webkit-scrollbar-track,
 .letter-paragraphs::-webkit-scrollbar-track,
 .timeline::-webkit-scrollbar-track,
-.video-grid-wrap::-webkit-scrollbar-track,
-.three-photo-grid-wrap::-webkit-scrollbar-track{
+.video-grid-wrap::-webkit-scrollbar-track{
   background: transparent;
 }
 
@@ -701,8 +644,7 @@ a{ color: var(--pink-light); }
 .envelope-letter-inner,
 .letter-paragraphs,
 .timeline,
-.video-grid-wrap,
-.three-photo-grid-wrap{
+.video-grid-wrap{
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
 }
