@@ -370,21 +370,16 @@ a{ color: var(--pink-light); }
 
 /* =========================================================
    PAGE 4 — 3 PHOTO GRID
-   Desktop/tablet: 3 columns side-by-side (unchanged).
-   Mobile (<=780px): stacked in 1 column, but the grid itself no
-   longer relies on the outer .page scroll alone — aspect-ratio is
-   reduced a bit and the section becomes an internally scrollable
-   block (same pattern used on pages 3/6/8) so it never gets stuck
-   or feels "cut off" on phones.
+   Semua foto + teks dibuat muat dalam satu layar tanpa scroll,
+   baik di desktop maupun mobile.
 ========================================================= */
-#page-3 .page-inner{ height: 100%; display: flex; flex-direction: column; }
+#page-3.page{ padding: 70px 20px 100px; }
+#page-3 .page-inner{ height: 100%; display: flex; flex-direction: column; justify-content: center; }
 #page-3 .eyebrow, #page-3 .script-title{ flex-shrink: 0; }
+#page-3 .script-title.big{ margin-bottom: 4px; }
 
 .three-photo-grid-wrap{
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  touch-action: pan-y;
+  overflow: visible; /* tidak lagi jadi area scroll sendiri */
 }
 
 .three-photo-grid{
@@ -407,16 +402,22 @@ a{ color: var(--pink-light); }
 }
 
 @media (max-width: 780px){
+  #page-3.page{ padding: 64px 12px 84px; }
+  #page-3 .script-title.big{ font-size: clamp(1.5rem, 5.6vw, 2.2rem); }
+  #page-3 .eyebrow{ margin-bottom: 4px; font-size: 0.62rem; }
   .three-photo-grid{
-    grid-template-columns: 1fr;
-    gap: 18px;
+    grid-template-columns: repeat(3, 1fr); /* tetap 3 kolom, JANGAN ditumpuk 1 kolom */
+    gap: 8px;
   }
-  .three-photo-grid-wrap{
-    max-height: 62vh;
-    padding: 4px 6px;
-  }
-  .photo-frame{ aspect-ratio: 4/3; } /* shorter cards so 3 stacked photos fit + scroll comfortably */
-  .photo-card figcaption{ margin-top: 8px; font-size: 0.8rem; }
+  .photo-frame{ aspect-ratio: 3/4; border-width: 2px; border-radius: 10px; }
+  .photo-card figcaption{ margin-top: 5px; font-size: 0.6rem; line-height: 1.2; }
+}
+
+@media (max-width: 480px){
+  #page-3.page{ padding: 56px 10px 74px; }
+  .three-photo-grid{ gap: 6px; }
+  .photo-frame{ border-width: 1.5px; }
+  .photo-card figcaption{ margin-top: 4px; font-size: 0.55rem; }
 }
 
 /* =========================================================
