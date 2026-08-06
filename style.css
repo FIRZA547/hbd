@@ -490,9 +490,7 @@ a{ color: var(--pink-light); }
 .video-item{
   border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-soft);
   border: 1px solid rgba(255,255,255,0.1);
-  transition: transform .4s var(--ease);
 }
-.video-item:hover{ transform: scale(1.04); }
 .video-item video{ width: 100%; display: block; aspect-ratio: 9/16; object-fit: cover; background:#000; }
 
 @media (max-width: 780px){
