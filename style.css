@@ -392,7 +392,7 @@ a{ color: var(--pink-light); }
    ikut mengecil dan tidak memakan terlalu banyak ruang vertikal.
    Dibuat lebih ramping dari sebelumnya supaya sisa ruang vertikal
    bisa dipakai untuk memperbesar foto. */
-#page-3 .script-title.big{ font-size: clamp(2 rem, 7vh, 3.5rem); line-height: 1.1; margin-bottom: 2px; }
+#page-3 .script-title.big{ font-size: clamp(1.7rem, 5vh, 3.1rem); line-height: 1.1; margin-bottom: 5px; }
 
 .three-photo-grid-wrap{
   overflow: visible; /* bukan area scroll sendiri */
